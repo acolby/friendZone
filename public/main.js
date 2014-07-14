@@ -263,4 +263,21 @@ $(function() {
   socket.on('stop typing', function (data) {
     removeChatTyping(data);
   });
+
+
+  // pong game
+
+
+
+  socket.on('ball moved', function(data){
+    //console.log(data);
+  });
+
+  
+
+
+
+
+
+
 });
