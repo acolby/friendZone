@@ -79,26 +79,4 @@ io.on('connection', function (socket) {
     }
   });
 
-  // pongGame
-
-  // runtime 
-  var ball = pongGame.createBall(0, 0, 5, 10);
-  var lastTime = new Date();
-  setInterval(function(){
-    // time change 
-    var now = new Date().getTime();
-    var timeChange = now - lastTime;
-    lastTime = now;
-    ball.move(timeChange, 100, 100, 0, 0);
-    var newCoordes = {
-      x: ball.getPosition()[0],
-      y: ball.getPosition()[1]
-    };
-    console.log(newCoordes);
-    socket.broadcast.emit('ball moved', newCoordes);
-  }, 100);
-
 });
-
-
-// pong game
