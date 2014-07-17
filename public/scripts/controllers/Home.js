@@ -23,6 +23,7 @@ angular.module('FriendZone')
 				if($scope.userName){
 					socket.emit('add user', $scope.userName);
 					$scope.hideLoginScreen = true;
+					getLocation();
 				}
 			};
 
@@ -91,6 +92,23 @@ angular.module('FriendZone')
 				var index = Math.abs(hash % COLORS.length);
 				return COLORS[index];
 			}
+
+			var x = document.getElementById("demo");
+
+			function getLocation() {
+			    if (navigator.geolocation) {
+			        navigator.geolocation.getCurrentPosition(showPosition);
+			    } else { 
+			        x.innerHTML = "Geolocation is not supported by this browser.";
+			    }
+			}
+
+			$scope.usersPosition = {'location': 'searching'};
+			function showPosition(position) {
+				$scope.usersPosition = position;
+				$scope.$apply();
+			}
+
 
 		}
 	]);

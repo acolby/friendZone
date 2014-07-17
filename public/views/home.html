@@ -10,20 +10,18 @@
 	<div class='col-sm-12 wholePage' ng-show='hideLoginScreen'>
 		<div class='row' style='height:100%;'>
 			<div class='col-sm-8' style='height:100%;'>
-				welcome {{userName}}
+				welcome {{userName}}, you are at <pre>{{usersPosition | json}}</pre>
 			</div>
 			<div class='col-sm-4' style='height:100%;'>
-				<div class="chatContainer" style='height:100%;'>
-					<div style='max-height:100%; height'>
-						<div>
-							<div ng-repeat='item in chatDisplayObject'>
-								<div ng-if='item.type === "message"'>{{item.contents.message}}</div>
-								<span ng-if='item.type === "chatMessage"'>
-									<span ng-style='item.contents.style'>{{item.contents.username}}</span>
-									<span>{{item.contents.message}}</span>
-								</span>
-								<div style='clear:both'></div>
-							</div>
+				<div class="chatContainer" style='height:100%; padding-bottom:60px;'>
+					<div style='height:100%; overflow:scroll;'>
+						<div ng-repeat='item in chatDisplayObject'>
+							<div ng-if='item.type === "message"'>{{item.contents.message}}</div>
+							<span ng-if='item.type === "chatMessage"'>
+								<span ng-style='item.contents.style'>{{item.contents.username}}</span>
+								<span>{{item.contents.message}}</span>
+							</span>
+							<div style='clear:both'></div>
 						</div>
 					</div>
 					<input ng-model='newMessage' class="inputMessage" placeholder="Type here..." ui-keypress="{13:'newMessageSubmitted()'}"/>
