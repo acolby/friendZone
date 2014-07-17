@@ -1,25 +1,34 @@
-<div style='width:200px; height:900px;'>
-	<ul class="pages">
-		<li class="chat page" ng-show='hideLoginScreen'>
-			<div class="chatArea">
-				<ul class="messages">
-					<div ng-repeat='item in chatDisplayObject'>
-						<li ng-if='item.type === "message"' class='log'>{{item.contents.message}}</li>
-						<span ng-if='item.type === "chatMessage"'>
-							<span  class="username" ng-style='item.contents.style'>{{item.contents.username}}</span>
-							<span class="messageBody">{{item.contents.message}}</span>
-						</span>
-						<div style='clear:both'></div>
-					</div>
-				</ul>
-			</div>
-			<input ng-model='newMessage' class="inputMessage" placeholder="Type here..." ui-keypress="{13:'newMessageSubmitted()'}"/>
-		</li>
-		<li class="login page" ng-hide='hideLoginScreen'>
-			<div class="form">
+<div class='row' style='height:100%;'>
+	<div class='col-sm-12 wholePage dark' ng-hide='hideLoginScreen'>
+		<div>
+			<div class="wholePageForm">
 				<h3 class="title">What's your nickname?</h3>
 				<input class="usernameInput" type="text" maxlength="14"ng-model='userName' ui-keypress="{13:'newUserNameSubmitted()'}"/>
 			</div>
-		</li>
-	</ul>
+		</div>
+	</div>
+	<div class='col-sm-12 wholePage' ng-show='hideLoginScreen'>
+		<div class='row' style='height:100%;'>
+			<div class='col-sm-8' style='height:100%;'>
+				welcome {{userName}}
+			</div>
+			<div class='col-sm-4' style='height:100%;'>
+				<div class="chatContainer" style='height:100%;'>
+					<div style='max-height:100%; height'>
+						<div>
+							<div ng-repeat='item in chatDisplayObject'>
+								<div ng-if='item.type === "message"'>{{item.contents.message}}</div>
+								<span ng-if='item.type === "chatMessage"'>
+									<span ng-style='item.contents.style'>{{item.contents.username}}</span>
+									<span>{{item.contents.message}}</span>
+								</span>
+								<div style='clear:both'></div>
+							</div>
+						</div>
+					</div>
+					<input ng-model='newMessage' class="inputMessage" placeholder="Type here..." ui-keypress="{13:'newMessageSubmitted()'}"/>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

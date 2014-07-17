@@ -38,7 +38,7 @@ angular.module('FriendZone')
 				$scope.chatDisplayObject.push({
 					'type': 'message',
 					'contents': {
-						'message': 'Welcome to Socket.IO Angular Style!!'
+						'message': 'chat here!'
 					}
 				});
 			});
