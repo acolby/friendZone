@@ -1,23 +1,25 @@
-<ul class="pages">
-	<li class="chat page" ng-show='hideLoginScreen'>
-		<div class="chatArea">
-			<ul class="messages">
-				<div ng-repeat='item in chatDisplayObject'>
-					<li ng-if='item.type === "message"' class='log'>{{item.contents.message}}</li>
-					<span ng-if='item.type === "chatMessage"'>
-						<span  class="username" ng-style='item.contents.style'>{{item.contents.username}}</span>
-						<span class="messageBody">{{item.contents.message}}</span>
-					</span>
-					<div style='clear:both'></div>
-				</div>
-			</ul>
-		</div>
-		<input ng-model='newMessage' class="inputMessage" placeholder="Type here..." ui-keypress="{13:'newMessageSubmitted()'}"/>
-	</li>
-	<li class="login page" ng-hide='hideLoginScreen'>
-		<div class="form">
-			<h3 class="title">What's your nickname?</h3>
-			<input class="usernameInput" type="text" maxlength="14"ng-model='userName' ui-keypress="{13:'newUserNameSubmitted()'}"/>
-		</div>
-	</li>
-</ul>
+<div style='width:200px; height:900px;'>
+	<ul class="pages">
+		<li class="chat page" ng-show='hideLoginScreen'>
+			<div class="chatArea">
+				<ul class="messages">
+					<div ng-repeat='item in chatDisplayObject'>
+						<li ng-if='item.type === "message"' class='log'>{{item.contents.message}}</li>
+						<span ng-if='item.type === "chatMessage"'>
+							<span  class="username" ng-style='item.contents.style'>{{item.contents.username}}</span>
+							<span class="messageBody">{{item.contents.message}}</span>
+						</span>
+						<div style='clear:both'></div>
+					</div>
+				</ul>
+			</div>
+			<input ng-model='newMessage' class="inputMessage" placeholder="Type here..." ui-keypress="{13:'newMessageSubmitted()'}"/>
+		</li>
+		<li class="login page" ng-hide='hideLoginScreen'>
+			<div class="form">
+				<h3 class="title">What's your nickname?</h3>
+				<input class="usernameInput" type="text" maxlength="14"ng-model='userName' ui-keypress="{13:'newUserNameSubmitted()'}"/>
+			</div>
+		</li>
+	</ul>
+</div>
