@@ -29,7 +29,7 @@ angular.module('FriendZone')
 
 			$scope.newMessageSubmitted = function() {
 				if($scope.newMessage){
-					addChatMessage($scope.userName, $scope.newMessage);
+					//addChatMessage($scope.userName, $scope.newMessage);
 				    socket.emit('new message', $scope.newMessage);
 				    $scope.newMessage = '';
 				}
