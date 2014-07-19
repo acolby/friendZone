@@ -13,19 +13,7 @@
 				welcome {{userName}}, you are at <pre>{{usersPosition | json}}</pre>
 			</div>
 			<div class='col-sm-4' style='height:100%;'>
-				<div class="chatContainer" style='height:100%; padding-bottom:60px;'>
-					<div style='height:100%; overflow:scroll;'>
-						<div ng-repeat='item in chatDisplayObject'>
-							<div ng-if='item.type === "message"'>{{item.contents.message}}</div>
-							<span ng-if='item.type === "chatMessage"'>
-								<span ng-style='item.contents.style'>{{item.contents.username}}</span>
-								<span>{{item.contents.message}}</span>
-							</span>
-							<div style='clear:both'></div>
-						</div>
-					</div>
-					<input ng-model='newMessage' class="inputMessage" placeholder="Type here..." ui-keypress="{13:'newMessageSubmitted()'}"/>
-				</div>
+				<div chatroom username='username'></div>
 			</div>
 		</div>
 	</div>

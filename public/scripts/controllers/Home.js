@@ -4,20 +4,6 @@ angular.module('FriendZone')
 	.controller('HomeCtrl', ['$scope', 'SocketService',
 		function($scope, socket) {
 
-			$scope.chatDisplayObject = [];
-			function addChatMessage(username, message){
-				$scope.chatDisplayObject.push({
-					'type': 'chatMessage',
-					'contents': {
-						'username': username,
-						'style': {
-							'color': getUsernameColor(username)
-						},
-						'message': message
-					}
-				});
-			}
-
 			// callbacks from the view
 			$scope.newUserNameSubmitted = function() {
 				if($scope.userName){
@@ -27,28 +13,7 @@ angular.module('FriendZone')
 				}
 			};
 
-			$scope.newMessageSubmitted = function() {
-				if($scope.newMessage){
-					//addChatMessage($scope.userName, $scope.newMessage);
-				    socket.emit('new message', $scope.newMessage);
-				    $scope.newMessage = '';
-				}
-			};
-
-			socket.on('login', function(data) {
-				$scope.chatDisplayObject.push({
-					'type': 'message',
-					'contents': {
-						'message': 'chat here!'
-					}
-				});
-			});
-
-			// Whenever the server emits 'new message', update the chat body
-			socket.on('new message', function(data) {
-				addChatMessage(data.username, data.message);
-			});
-
+			
 			/*
 				// Whenever the server emits 'user joined', log it in the chat body
 				socket.on('user joined', function(data) {
@@ -77,38 +42,19 @@ angular.module('FriendZone')
 			// Suport functions
 			// Gets the color of a username through our hash function
 
-			var COLORS = [
-				'#e21400', '#91580f', '#f8a700', '#f78b00',
-				'#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
-				'#3b88eb', '#3824aa', '#a700ff', '#d300e7'
-			];
-			function getUsernameColor(username) {
-				// Compute hash code
-				var hash = 7;
-				for (var i = 0; i < username.length; i++) {
-					hash = username.charCodeAt(i) + (hash < 5) - hash;
-				}
-				// Calculate color
-				var index = Math.abs(hash % COLORS.length);
-				return COLORS[index];
-			}
-
-			var x = document.getElementById("demo");
-
+			// location stuff
+			var x = document.getElementById('demo');
 			function getLocation() {
 			    if (navigator.geolocation) {
 			        navigator.geolocation.getCurrentPosition(showPosition);
-			    } else { 
-			        x.innerHTML = "Geolocation is not supported by this browser.";
+			    } else {
+			        x.innerHTML = 'Geolocation is not supported by this browser.';
 			    }
 			}
-
 			$scope.usersPosition = {'location': 'searching'};
 			function showPosition(position) {
 				$scope.usersPosition = position;
 				$scope.$apply();
 			}
-
-
 		}
 	]);
