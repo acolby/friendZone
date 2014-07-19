@@ -1,81 +1,76 @@
 'use strict';
 var historyTracker = require('./historyTracker');
 
-function addFriend(friendZone, userId){
-	// check if the friend already exists
-	if(friendZone.friends[userId] === undefined){
-		friendZone.friends[userId].push({
+function addPerson(chatRoom, userId){
+	// check if the Person already exists
+	if(chatRoom.people[userId] === undefined){
+		chatRoom.people[userId].push({
 			'id': userId,
-			'location': null,
-			'status': null,
-			'lastUpdated': null
+			'status': null
 		});
 	}
 	return true;
 }
 
-function removeFriend(friendZone, userId){
-	// check if the friend already exists
-	if(friendZone.friends[userId] !== undefined){
-		delete friendZone.friends[userId];
+function removePerson(chatRoom, userId){
+	// check if the Person already exists
+	if(chatRoom.people[userId] !== undefined){
+		delete chatRoom.people[userId];
 	}
 	return true;
 }
 
-function addLocation(friendZone, userId, location){
-	// check if the user exists if not add them
-	if(friendZone.friends[userId] === undefined){
-		addFriend(friendZone, userId);
-	}
+function addMessage(chatRoom, userId, message){
+	chatRoom.messages.push(message);
 	return true;
 }
 
 module.exports = {
 	//public methods
-	create: function(id, radius){
+	create: function(id){
 
 		var history = historyTracker.create();
 
-		var friendZone = {
+		var chatRoom = {
 			'id': id,
-			'friends': {/*
-				'userId':
+			'people': {/*
+				[
 					{
 						'id': userId,
 						'location': null,
 						'status': null,
 						'lastUpdated': null
-					}...*/
+					}
+				]*/
 			},
-			'currentCenterLocation': null,
+			'messages': [],
 			'history': {
 				'actions': history.actions,
 				'keys': history.keys
 			},
-			'radius': radius,
-			'addFriend': function(userId){
-				if(addFriend(this, userId)){
+			'addPerson': function(userId){
+				if(addPerson(this, userId)){
 					history.trackKeyAction(userId, {
 						'name': 'added',
 						'userId': userId
 					});
 				}
 			},
-			'removeFriend': function(userId){
-				if(removeFriend(this, userId)){
+			'removePerson': function(userId){
+				if(removePerson(this, userId)){
 					history.trackKeyAction(userId, {
 						'name': 'removed',
 						'userId': userId
 					});
 				}
 			},
-			'addLocation': function(userId, location){
-				if(addLocation(this, userId, location)){
+			'addMessage': function(userId, message){
+				if(addMessage(this, userId, message)){
 					var now = new Date();
 					history.trackKeyAction(userId, {
-						'name': 'location added',
+						'name': 'message added',
 						'userId': userId,
-						'location': location
+						'message': message
 					});
 				}
 			},
@@ -91,9 +86,6 @@ module.exports = {
 		history.trackAction({
 			'name': 'created'
 		});
-		return friendZone;
-	},
-	addFriend: function(){
-
+		return chatRoom;
 	}
 };
