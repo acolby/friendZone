@@ -1,3 +1,5 @@
+'use strict';
+
 // Setup basic express server
 var express = require('express');
 var app = express();
@@ -5,13 +7,14 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 
-var pongGame = require('./my_modules/pongGame.js');
+var ChatRoom = require('./my_modules/chatRoom.js');
+var FriendZone = require('./my_modules/friendZone.js');
 
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
 });
 
-// Routing
+// Serve The Front end
 app.use(express.static(__dirname + '/public'));
 
 // Chatroom
@@ -20,8 +23,19 @@ app.use(express.static(__dirname + '/public'));
 var usernames = {};
 var numUsers = 0;
 
+// create fried zone and chatroom
+
+var chatRoom = ChatRoom.create(1);
+var friendZone = FriendZone.create(1);
+
 io.on('connection', function (socket) {
   var addedUser = false;
+
+  // add the user to the chatRoom and friendZone
+  chatRoom.addPerson(socket.id);
+  friendZone.addFriend(socket.id);
+
+  // addChatRoomCallbacks
 
   // when the client emits 'new message', this listens and executes
   socket.on('new message', function (data) {
@@ -52,6 +66,7 @@ io.on('connection', function (socket) {
 
   // when the client emits 'typing', we broadcast it to others
   socket.on('typing', function () {
+    console.log(socket.id);
     socket.broadcast.emit('typing', {
       username: socket.username
     });
@@ -66,17 +81,13 @@ io.on('connection', function (socket) {
 
   // when the user disconnects.. perform this
   socket.on('disconnect', function () {
+    chatRoom.removePerson(socket.id);
+    friendZone.removeFriend(socket.id);
     // remove the username from global usernames list
-    if (addedUser) {
-      delete usernames[socket.username];
-      --numUsers;
-
-      // echo globally that this client has left
-      socket.broadcast.emit('user left', {
-        username: socket.username,
-        numUsers: numUsers
-      });
-    }
+    socket.broadcast.emit('user left', {
+      username: socket.username,
+      numUsers: numUsers
+    });
   });
 
 });

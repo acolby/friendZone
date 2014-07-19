@@ -1,9 +1,11 @@
 'use strict';
+
 var historyTracker = require('./historyTracker');
 
 function addFriend(friendZone, userId){
 	// check if the friend already exists
 	if(friendZone.friends[userId] === undefined){
+		friendZone.friends[userId] = [];
 		friendZone.friends[userId].push({
 			'id': userId,
 			'location': null,

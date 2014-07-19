@@ -4,6 +4,7 @@ var historyTracker = require('./historyTracker');
 function addPerson(chatRoom, userId){
 	// check if the Person already exists
 	if(chatRoom.people[userId] === undefined){
+		chatRoom.people[userId] = [];
 		chatRoom.people[userId].push({
 			'id': userId,
 			'status': null
