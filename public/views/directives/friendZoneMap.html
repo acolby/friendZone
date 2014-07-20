@@ -1,1 +1,10 @@
-<google-map style='height: 100%;' control='mapController' center="map.center" zoom="map.zoom"></google-map>
+<div style='height:100%; position:relative;'>
+	<google-map ng-show='mapReady' style='height: 200px; position: relative;' control='mapController' events='eventListeners' center="map.center" zoom="map.zoom">
+		<marker coords='map.center' icon='"images/locationIcons/location_pin.png"' options='{icon.size:{"height":20, "width":20}}'>
+		</marker>
+		<marker ng-repeat='friend in friends' coords='friend.location.coords' icon='"images/locationIcons/person_pin.png"'>
+		</marker>
+		<circle center='map.center' radius='50'></circle>
+	</google-map>
+	<div ng-hide='mapReady'>The map is loading...</div>
+</div>
