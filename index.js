@@ -44,11 +44,33 @@ var sessionInfo = {
     return true;
   }
 };
-
 io.on('connection', function (socket) {
-  var addedUser = false;
   // add the user to users
   sessionInfo.addUser(socket.id);
+
+  // Genral socket calls
+  socket.on('add user', function (username) {
+    socket.username = username;
+    sessionInfo.setUsername(socket.id, username);
+    chatRoom.addPerson(socket.id);
+    friendZone.addFriend(socket.id);
+
+    socket.emit('login', {
+      numUsers: chatRoom.getPeopleTotal()
+    });
+  });
+   // when the user disconnects.. perform this
+  socket.on('disconnect', function () {
+    chatRoom.removePerson(socket.id);
+    friendZone.removeFriend(socket.id);
+  });
+
+  // ************ Chatroom calls **************/
+  socket.on('new message', function (message) {
+    chatRoom.addMessage(socket.id, message);
+  });
+  socket.on('typing', function () {});
+  socket.on('stop typing', function () {});
 
   // add chatRoom callbacks
   chatRoom.onPersonAdded(function(userId){
@@ -70,32 +92,22 @@ io.on('connection', function (socket) {
     });
   });
 
-  // handling socket calls
-  socket.on('new message', function (message) {
-    chatRoom.addMessage(socket.id, message);
+  // ************ FriendZone calls **************/
+  friendZone.onFriendAdded(function(friends){
+    socket.emit('friendZone: changed', friends);
+  });
+  friendZone.onFriendRemoved(function(friends){
+    socket.emit('friendZone: changed', friends);
+  });
+  friendZone.onLocationChange(function(friends){
+    socket.emit('friendZone: changed', friends);
+  });
+  friendZone.onStatusChange(function(friends){
+    socket.emit('friendZone: changed', friends);
   });
 
-  // when the client emits 'add user', this listens and executes
-  socket.on('add user', function (username) {
-    socket.username = username;
-    sessionInfo.setUsername(socket.id, username);
-    chatRoom.addPerson(socket.id);
-    friendZone.addFriend(socket.id);
-
-    addedUser = true;
-    socket.emit('login', {
-      numUsers: chatRoom.getPeopleTotal()
-    });
-  });
-
-  // unused sockets
-  socket.on('typing', function () {});
-  socket.on('stop typing', function () {});
-
-  // when the user disconnects.. perform this
-  socket.on('disconnect', function () {
-    chatRoom.removePerson(socket.id);
-    friendZone.removeFriend(socket.id);
+  socket.on('friendZone: modify location', function (location) {
+    friendZone.addLocation(socket.id, location);
   });
 
 });

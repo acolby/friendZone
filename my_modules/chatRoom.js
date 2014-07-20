@@ -5,10 +5,10 @@ function addPerson(chatRoom, userId){
 	// check if the Person already exists
 	if(chatRoom.people[userId] === undefined){
 		chatRoom.people[userId] = [];
-		chatRoom.people[userId].push({
+		chatRoom.people[userId] = {
 			'id': userId,
 			'status': null
-		});
+		};
 	}
 	return true;
 }
