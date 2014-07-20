@@ -12,11 +12,17 @@
 			<div class='col-sm-8' style='height:100%;'>
 				<div class="chatContainer" style='height:100%; padding-bottom:0px;'>
 					<div style='height:100%; overflow:scroll;'>
-						<google-map style='height: 200px; position: relative;' center="map.center" zoom="map.zoom">
-							<marker coords='map.center'
-							    icon='"images/locationIcons/location_pin.png"' options='{icon.size:{"height":20, "width":20}}'>
+						<!--
+						<pre>{{friendZone | json}}</pre>
+						-->
+						<google-map ng-if='mapReady' style='height: 200px; position: relative;' center="$scope.friendZone.centerLocation.coords" zoom="map.zoom" events='eventListeners' control='mapController' refresh='mapReady'>
+							<marker coords='$scope.friendZone.centerLocation.coords' icon='"images/locationIcons/location_pin.png"'>
 							</marker>
+							<marker ng-repeat='friend in friendZone.friends' coords='friend.location.coords' icon='"images/locationIcons/person_pin.png"'>
+							</marker>
+							<circle center='$scope.friendZone.centerLocation.coords' radius='50'></circle>
 						</google-map>
+						<button ng-click='centermap()' class='btn btn-default' style='position:absolute; bottom:20px; right:20px;'>center</button>
 					</div>
 				</div>
 			</div>

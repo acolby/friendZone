@@ -93,17 +93,29 @@ io.on('connection', function (socket) {
   });
 
   // ************ FriendZone calls **************/
-  friendZone.onFriendAdded(function(friends){
-    socket.emit('friendZone: changed', friends);
+  friendZone.onFriendAdded(function(friends, centerLocation){
+    socket.emit('friendZone: changed', {
+      'friends': friends,
+      'centerLocation': centerLocation
+    });
   });
-  friendZone.onFriendRemoved(function(friends){
-    socket.emit('friendZone: changed', friends);
+  friendZone.onFriendRemoved(function(friends, centerLocation){
+    socket.emit('friendZone: changed', {
+      'friends': friends,
+      'centerLocation': centerLocation
+    });
   });
-  friendZone.onLocationChange(function(friends){
-    socket.emit('friendZone: changed', friends);
+  friendZone.onLocationChange(function(friends, centerLocation){
+    socket.emit('friendZone: changed', {
+      'friends': friends,
+      'centerLocation': centerLocation
+    });
   });
-  friendZone.onStatusChange(function(friends){
-    socket.emit('friendZone: changed', friends);
+  friendZone.onStatusChange(function(friends, centerLocation){
+    socket.emit('friendZone: changed', {
+      'friends': friends,
+      'centerLocation': centerLocation
+    });
   });
 
   socket.on('friendZone: modify location', function (location) {

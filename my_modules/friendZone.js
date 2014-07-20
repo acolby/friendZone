@@ -1,5 +1,10 @@
 'use strict';
 
+// diameter of earth in meters
+var EARTH_RADIUS = 6371000;
+var toRadianConverter = Math.PI/180.00;
+var toDegreesConverter = 180.00/Math.PI;
+
 var historyTracker = require('./historyTracker');
 
 function addFriend(friendZone, userId){
@@ -12,6 +17,7 @@ function addFriend(friendZone, userId){
 			'status': null,
 			'lastUpdated': null
 		};
+		calculateCenterPosition(friendZone);
 	}
 	return true;
 }
@@ -20,6 +26,7 @@ function removeFriend(friendZone, userId){
 	// check if the friend already exists
 	if(friendZone.friends[userId] !== undefined){
 		delete friendZone.friends[userId];
+		calculateCenterPosition(friendZone);
 	}
 	return true;
 }
@@ -28,7 +35,44 @@ function addLocation(friendZone, userId, location){
 	// check if the user exists if not add them
 	if(friendZone.friends[userId] !== undefined){
 		friendZone.friends[userId].location = location;
+		calculateCenterPosition(friendZone);
 	}
+	return true;
+}
+function calculateCenterPosition(friendZone){
+	var cartesionCoords = [];
+	for(var key in friendZone.friends){
+		// get coords in cartesion
+		if(friendZone.friends[key].location !== null){
+			if(friendZone.friends[key].location.coords){
+				cartesionCoords.push({
+					'x': Math.cos(friendZone.friends[key].location.coords.latitude*toRadianConverter) * Math.cos(friendZone.friends[key].location.coords.longitude*toRadianConverter),
+					'y': Math.cos(friendZone.friends[key].location.coords.latitude*toRadianConverter) * Math.sin(friendZone.friends[key].location.coords.longitude*toRadianConverter),
+					'z': Math.sin(friendZone.friends[key].location.coords.latitude*toRadianConverter)
+				});
+			}
+		}
+	}
+	var xcenter = 0;
+	var ycenter = 0;
+	var zcenter = 0;
+	var numberOfCoords = cartesionCoords.length;
+
+	for(var i = 0; i < numberOfCoords; i++){
+		xcenter += (cartesionCoords[i].x);
+		ycenter += (cartesionCoords[i].y);
+		zcenter += (cartesionCoords[i].z);
+	}
+	if(numberOfCoords > 0){
+		xcenter = xcenter/numberOfCoords;
+		ycenter = ycenter/numberOfCoords;
+		zcenter = zcenter/numberOfCoords;
+
+		// convert back to long ladditude
+		friendZone.currentCenterLocation.coords.longitude = Math.atan2(ycenter, xcenter)*toDegreesConverter;
+		friendZone.currentCenterLocation.coords.latitude = Math.atan2(zcenter, Math.sqrt(xcenter * xcenter + ycenter * ycenter))*toDegreesConverter;
+	}
+
 	return true;
 }
 
@@ -52,6 +96,7 @@ function callFunctionList(){
 	}
 }
 
+
 module.exports = {
 	//public methods
 	create: function(id, radius){
@@ -69,7 +114,9 @@ module.exports = {
 						'lastUpdated': null
 					}...*/
 			},
-			'currentCenterLocation': null,
+			'currentCenterLocation': {
+				'coords':{}
+			},
 			'history': {
 				'actions': history.actions,
 				'keys': history.keys
@@ -82,7 +129,7 @@ module.exports = {
 						'name': 'added',
 						'userId': userId
 					});
-					callFunctionList(that.onFriendAddedFunctions, that.friends);
+					callFunctionList(that.onFriendAddedFunctions, that.friends, that.currentCenterLocation);
 				}
 			},
 			'removeFriend': function(userId){
@@ -92,7 +139,7 @@ module.exports = {
 						'name': 'removed',
 						'userId': userId
 					});
-					callFunctionList(that.onFriendRemovedFunctions, that.friends);
+					callFunctionList(that.onFriendRemovedFunctions, that.friends, that.currentCenterLocation);
 				}
 			},
 			'addLocation': function(userId, location){
@@ -104,7 +151,7 @@ module.exports = {
 						'userId': userId,
 						'location': location
 					});
-					callFunctionList(that.onLocationChangeFunctions, that.friends);
+					callFunctionList(that.onLocationChangeFunctions, that.friends, that.currentCenterLocation);
 				}
 			},
 			'onFriendAddedFunctions': [], // friends

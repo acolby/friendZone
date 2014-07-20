@@ -7,7 +7,8 @@ angular.module('FriendZone', [
   'ngRoute',
   'ui.bootstrap',
   'ui',
-  'google-maps'
+  'google-maps',
+  'geolocation'
 ])
   .config(function ($routeProvider) {
     $routeProvider
