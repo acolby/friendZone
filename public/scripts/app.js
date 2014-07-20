@@ -6,7 +6,8 @@ angular.module('FriendZone', [
   'ngSanitize',
   'ngRoute',
   'ui.bootstrap',
-  'ui'
+  'ui',
+  'google-maps'
 ])
   .config(function ($routeProvider) {
     $routeProvider

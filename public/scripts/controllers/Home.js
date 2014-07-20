@@ -30,5 +30,16 @@ angular.module('FriendZone')
 			socket.on('friendZone: changed', function(friends){
 				$scope.friends = friends;
 			});
+
+			// make map happen
+
+			$scope.map = {
+			    center: {
+			        latitude: 45,
+			        longitude: -73
+			    },
+			    zoom: 8
+			};
+		    
 		}
 	]);
