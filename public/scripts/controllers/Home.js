@@ -42,6 +42,7 @@ angular.module('FriendZone')
 				zoom: 20
 			};
 			//*** Handeling the map ** //
+			/*
 			$scope.mapReady = false;
 			$scope.mapController = {};
 			function refreshMap(){
@@ -62,7 +63,7 @@ angular.module('FriendZone')
 				refreshMap();
 			};
 
-			
+			*/
 			
 
 		}

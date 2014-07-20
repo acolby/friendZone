@@ -15,6 +15,7 @@
 						<!--
 						<pre>{{friendZone | json}}</pre>
 						-->
+	
 						<google-map ng-if='mapReady' style='height: 200px; position: relative;' center="$scope.friendZone.centerLocation.coords" zoom="map.zoom" events='eventListeners' control='mapController' refresh='mapReady'>
 							<marker coords='$scope.friendZone.centerLocation.coords' icon='"images/locationIcons/location_pin.png"'>
 							</marker>
@@ -22,6 +23,8 @@
 							</marker>
 							<circle center='$scope.friendZone.centerLocation.coords' radius='50'></circle>
 						</google-map>
+
+
 						<button ng-click='centermap()' class='btn btn-default' style='position:absolute; bottom:20px; right:20px;'>center</button>
 					</div>
 				</div>
